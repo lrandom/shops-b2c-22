@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import com.example.shopsb2c22.domains.User;
 
 public class DalUser extends Conn implements IDAL<User> {
-    String getListQuery;
-    String addQuery;
-    String updateQuery;
-    String deleteQuery;
+
 
     public DalUser() {
         super();

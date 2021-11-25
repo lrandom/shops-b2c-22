@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class Color {
+    public static final String COL_ID = "id";
+    public static final String COL_NAME = "name";
     Long id;
     String name;
 }

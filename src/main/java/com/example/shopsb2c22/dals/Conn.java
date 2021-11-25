@@ -13,6 +13,10 @@ public class Conn {
 
     protected Connection conn;
     protected String tableName;
+    String getListQuery;
+    String addQuery;
+    String updateQuery;
+    String deleteQuery;
 
     public Conn() {
         try {
