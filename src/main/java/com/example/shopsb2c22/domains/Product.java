@@ -14,6 +14,10 @@ public class Product {
     public static final String COL_PRICE = "price";
     public static final String COL_QUANTITY = "quantity";
     public static final String COL_CATEGORY_ID = "category_id";
+    public static final String COL_IMAGE_PATH = "image_path";
+    public static final String COL_CATEGORY_NAME = "category_name";
+
+
 
     Long id;
     String name;
@@ -24,5 +28,10 @@ public class Product {
     Double price;
     Integer quantity;
     Long categoryId;
+
+    String categoryName;
+    String imagePath;
+
+
 }
 

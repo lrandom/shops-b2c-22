@@ -17,7 +17,67 @@ public class DalProduct extends Conn implements IDAL<Product> {
 
     @Override
     public ArrayList<Product> getList(int page, int limit, String orderBy, String orderType) {
-        return null;
+        ArrayList<Product> list = new ArrayList<Product>();
+        int offset = (page - 1) * limit;
+        this.getListQuery = "SELECT products.id,products.name,products.price," +
+                "products.category_id," +
+                "products.quantity,category.name as category_name, " +
+                "images.path as image_path FROM " + this.getTableName() +
+                " LEFT JOIN category ON products.category_id=category.id" +
+                " LEFT JOIN images ON products.id = images.product_id GROUP BY products.id " +
+                "ORDER BY " + orderBy + " " + orderType + " LIMIT " + offset + "," + limit;
+        System.out.println(this.getListQuery);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(this.getListQuery);
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getLong(Product.COL_ID));
+                product.setName(rs.getString(Product.COL_NAME));
+                product.setPrice(rs.getDouble(Product.COL_PRICE));
+                product.setCategoryName(rs.getString(Product.COL_CATEGORY_NAME));
+                product.setQuantity(rs.getInt(Product.COL_QUANTITY));
+                product.setImagePath(rs.getString(Product.COL_IMAGE_PATH));
+                list.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+        return list;
+    }
+
+    public ArrayList<Product> getProductByKeyword(String keyword, int page, int limit, String orderBy, String orderType) {
+        ArrayList<Product> list = new ArrayList<Product>();
+        int offset = (page - 1) * limit;
+        this.getListQuery = "SELECT products.id,products.name,products.price," +
+                "products.category_id," +
+                "products.quantity,category.name as category_name, " +
+                "images.path as image_path FROM " + this.getTableName() +
+                " LEFT JOIN category ON products.category_id=category.id" +
+                " LEFT JOIN images ON products.id = images.product_id WHERE (products.name LIKE '%" + keyword + "%' OR products.content LIKE  '%" + keyword + "%')  GROUP BY products.id " +
+                "ORDER BY " + orderBy + " " + orderType + " LIMIT " + offset + "," + limit;
+        System.out.println(this.getListQuery);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(this.getListQuery);
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getLong(Product.COL_ID));
+                product.setName(rs.getString(Product.COL_NAME));
+                product.setPrice(rs.getDouble(Product.COL_PRICE));
+                product.setCategoryName(rs.getString(Product.COL_CATEGORY_NAME));
+                product.setQuantity(rs.getInt(Product.COL_QUANTITY));
+                product.setImagePath(rs.getString(Product.COL_IMAGE_PATH));
+                list.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+        return list;
     }
 
     @Override
@@ -80,11 +140,40 @@ public class DalProduct extends Conn implements IDAL<Product> {
 
     @Override
     public Product getOne(Long id) {
-        return null;
+        ArrayList<Product> list = new ArrayList<Product>();
+        this.getListQuery = "SELECT * FROM " + this.getTableName() + " WHERE " + Product.COL_ID + " = " + id;
+        Product product = new Product();
+        System.out.println(this.getListQuery);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(this.getListQuery);
+            while (rs.next()) {
+                product.setId(rs.getLong(Product.COL_ID));
+                product.setName(rs.getString(Product.COL_NAME));
+                product.setPrice(rs.getDouble(Product.COL_PRICE));
+                product.setCategoryName(rs.getString(Product.COL_CATEGORY_NAME));
+                product.setQuantity(rs.getInt(Product.COL_QUANTITY));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+        return product;
     }
 
     @Override
     public Double getTotal() {
-        return null;
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT COUNT(*) as total_record FROM " + this.getTableName());
+            while (rs.next()) {
+                return rs.getDouble("total_record");
+            }
+        } catch (Exception e) {
+
+        }
+
+        return new Double(0);
     }
 }

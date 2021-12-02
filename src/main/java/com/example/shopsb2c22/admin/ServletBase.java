@@ -1,4 +1,4 @@
-package shops.admin;
+package com.example.shopsb2c22.admin;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
